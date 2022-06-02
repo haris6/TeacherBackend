@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs/dist/bcrypt');
 var Teacher = require('../models/teacher');
+var Exam = require('./models/exam')
 var jwt = require('jsonwebtoken');
 
 
@@ -64,18 +65,51 @@ const TeacherController = {
     },
 
     addExam: async(req,res,next)=>{
+        try {
+            const myExam = new Exam({
+                title: req.body.title,
+                teacher: req.body.teacher,
+                questions: req.body.questions,
+                starttime: req.body.starttime,
+                endtime: req.body.endtime,
+            });
+            if (myExam) {
+                await myExam.save();
+                res.status(201).json(myExam);
+            }
+            else {
+                res.status(500).json({ message: "couldn't create Exam" });
+            }
+        }
+        catch (e) {
+            res.status(500).json(e);
+            console.log(e);
+        }
+    },
+
+    getExams: async (req,res,next)=>{
         try{
-            const reftoken = req.cookies.refreshtoken
-            if(!reftoken) return res.json({message: "you are not logged in"})
-            console.log(refToken);
-            jwt.verify(reftoken, process.env(refreshTokenSecret) , (err, user) => {
-            if(err) return res.json({message: "you are not logged in"})
-            const accessToken = accessToken({id: user._id});
-            res.json(accessToken)
-            })
+            Exam.find({}).exec(function (error, results) {
+                if (error) {
+                    return next(error);
+                }
+                // Respond with valid data
+                res.json(results);
+            });
         }
         catch(e){
-            return res.json({message: e.message})
+            res.status(500).json(e);
+            console.log(e);
+        }
+    },
+
+    submitExam: async (req,res,next)=>{
+        try{
+
+        }
+        catch(e){
+            res.status(500).json(e);
+            console.log(e);
         }
     },
 }

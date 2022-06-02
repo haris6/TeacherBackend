@@ -4,11 +4,12 @@ var examSchema = new mongoose.Schema ({
     teacher:{
         type: mongoose.Types.ObjectId,
         ref: 'Teacher',
+    },
+    title:{
+        type: String,
     },   
-    questions: {
-        type: [{
-            type: String,
-        }]
+    questions:{
+        type:[String],
     },
     starttime:{
         type: String,
