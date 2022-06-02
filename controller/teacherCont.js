@@ -62,6 +62,22 @@ const TeacherController = {
             return res.json({message: e.message})
         }
     },
+
+    addExam: async(req,res,next)=>{
+        try{
+            const reftoken = req.cookies.refreshtoken
+            if(!reftoken) return res.json({message: "you are not logged in"})
+            console.log(refToken);
+            jwt.verify(reftoken, process.env(refreshTokenSecret) , (err, user) => {
+            if(err) return res.json({message: "you are not logged in"})
+            const accessToken = accessToken({id: user._id});
+            res.json(accessToken)
+            })
+        }
+        catch(e){
+            return res.json({message: e.message})
+        }
+    },
 }
 
 const accessToken = (payload) => {
