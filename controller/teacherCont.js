@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs/dist/bcrypt');
 var Teacher = require('../models/teacher');
-var Exam = require('./models/exam')
+var Exam = require('../models/exam')
 var jwt = require('jsonwebtoken');
 
 
